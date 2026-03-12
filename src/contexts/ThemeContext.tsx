@@ -5,7 +5,10 @@ interface ThemeContextType {
   toggle: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextType>({ isDark: false, toggle: () => {} });
+const ThemeContext = createContext<ThemeContextType>({
+  isDark: false,
+  toggle: () => {},
+});
 
 export const useTheme = () => useContext(ThemeContext);
 

@@ -24,9 +24,14 @@ export function Breadcrumbs() {
   const segments = location.pathname.split("/").filter(Boolean);
 
   // Check for dynamic tenant detail route
-  const isTenantDetail = segments[0] === "tenants" && segments.length === 2 && segments[1] !== "create";
+  const isTenantDetail =
+    segments[0] === "tenants" &&
+    segments.length === 2 &&
+    segments[1] !== "create";
 
-  const crumbs: { label: string; path: string }[] = [{ label: "Home", path: "/" }];
+  const crumbs: { label: string; path: string }[] = [
+    { label: "Home", path: "/" },
+  ];
 
   if (isTenantDetail) {
     crumbs.push({ label: "Tenants", path: "/tenants" });
@@ -48,7 +53,10 @@ export function Breadcrumbs() {
           {i === crumbs.length - 1 ? (
             <span className="text-foreground font-medium">{crumb.label}</span>
           ) : (
-            <Link to={crumb.path} className="hover:text-foreground transition-colors">
+            <Link
+              to={crumb.path}
+              className="hover:text-foreground transition-colors"
+            >
               {crumb.label}
             </Link>
           )}
@@ -70,7 +78,9 @@ export function PageHeader({ title, children }: PageHeaderProps) {
         <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
         <Breadcrumbs />
       </div>
-      {children && <div className="flex items-center gap-2 mt-2 sm:mt-0">{children}</div>}
+      {children && (
+        <div className="flex items-center gap-2 mt-2 sm:mt-0">{children}</div>
+      )}
     </div>
   );
 }

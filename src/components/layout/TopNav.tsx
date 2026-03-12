@@ -1,15 +1,27 @@
 import { useState } from "react";
-import { Search, Bell, Moon, Sun, Menu, User, Settings, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import {
+  Search,
+  Bell,
+  Moon,
+  Sun,
+  Menu,
+  User,
+  Settings,
+  LogOut,
+} from "lucide-react";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
-  DropdownMenuSeparator, DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 
 interface TopNavProps {
   onMobileMenuToggle: () => void;
@@ -24,7 +36,12 @@ export function TopNav({ onMobileMenuToggle }: TopNavProps) {
   return (
     <header className="sticky top-0 z-40 h-14 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-full items-center gap-4 px-4 sm:px-6">
-        <Button variant="ghost" size="icon" className="md:hidden h-8 w-8" onClick={onMobileMenuToggle}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden h-8 w-8"
+          onClick={onMobileMenuToggle}
+        >
           <Menu className="h-4 w-4" />
         </Button>
 
@@ -39,20 +56,36 @@ export function TopNav({ onMobileMenuToggle }: TopNavProps) {
         </div>
 
         <div className="flex items-center gap-1 ml-auto">
-          <Button variant="ghost" size="icon" className="h-9 w-9 relative" onClick={() => navigate("/notifications")}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 relative"
+            onClick={() => navigate("/notifications")}
+          >
             <Bell className="h-4 w-4" />
             <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive" />
           </Button>
 
-          <Button variant="ghost" size="icon" className="h-9 w-9" onClick={toggle}>
-            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9"
+            onClick={toggle}
+          >
+            {isDark ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
           </Button>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-9 gap-2 px-2">
                 <div className="h-7 w-7 rounded-full bg-primary flex items-center justify-center">
-                  <span className="text-xs font-medium text-primary-foreground">SA</span>
+                  <span className="text-xs font-medium text-primary-foreground">
+                    SA
+                  </span>
                 </div>
                 <span className="hidden sm:inline text-sm">Super Admin</span>
               </Button>
