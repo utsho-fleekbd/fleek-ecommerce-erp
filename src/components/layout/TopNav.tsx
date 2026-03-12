@@ -83,11 +83,13 @@ export function TopNav({ onMobileMenuToggle }: TopNavProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-9 gap-2 px-2">
                 <div className="h-7 w-7 rounded-full bg-primary flex items-center justify-center">
-                  <span className="text-xs font-medium text-primary-foreground">
-                    SA
-                  </span>
+                  <img
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=johndoe"
+                    alt=""
+                    className="h-full w-full object-cover rounded-full"
+                  />
                 </div>
-                <span className="hidden sm:inline text-sm">Super Admin</span>
+                <span className="hidden sm:inline text-sm">John Doe</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">

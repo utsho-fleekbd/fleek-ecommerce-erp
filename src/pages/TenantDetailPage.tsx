@@ -1,5 +1,15 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,9 +17,13 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Progress } from "@/components/ui/progress";
-import { mockTenants, mockModules, mockBillingHistory, mockSystemLogs } from "@/data/mockData";
+import {
+  mockTenants,
+  mockModules,
+  mockBillingHistory,
+  mockSystemLogs,
+} from "@/data/mockData";
 import { useToast } from "@/hooks/use-toast";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const usageData = [
   { name: "Products", used: 742, limit: 1000 },
@@ -20,8 +34,13 @@ const usageData = [
 ];
 
 const apiUsageByDay = [
-  { day: "Mon", calls: 7200 }, { day: "Tue", calls: 8100 }, { day: "Wed", calls: 6800 },
-  { day: "Thu", calls: 9200 }, { day: "Fri", calls: 7600 }, { day: "Sat", calls: 4200 }, { day: "Sun", calls: 3100 },
+  { day: "Mon", calls: 7200 },
+  { day: "Tue", calls: 8100 },
+  { day: "Wed", calls: 6800 },
+  { day: "Thu", calls: 9200 },
+  { day: "Fri", calls: 7600 },
+  { day: "Sat", calls: 4200 },
+  { day: "Sun", calls: 3100 },
 ];
 
 const features: Record<string, { name: string; enabled: boolean }[]> = {
@@ -43,7 +62,7 @@ export default function TenantDetailPage() {
   const tenant = mockTenants.find((t) => t.id === id) || mockTenants[0];
 
   const [modules, setModules] = useState(
-    mockModules.map((m) => ({ ...m, enabled: Math.random() > 0.3 }))
+    mockModules.map((m) => ({ ...m, enabled: Math.random() > 0.3 })),
   );
   const [featureState, setFeatureState] = useState(features);
 
@@ -52,11 +71,13 @@ export default function TenantDetailPage() {
       prev.map((m) => {
         if (m.id === moduleId) {
           const newState = !m.enabled;
-          toast({ title: `${m.name} module ${newState ? "enabled" : "disabled"}` });
+          toast({
+            title: `${m.name} module ${newState ? "enabled" : "disabled"}`,
+          });
           return { ...m, enabled: newState };
         }
         return m;
-      })
+      }),
     );
   };
 
@@ -64,8 +85,13 @@ export default function TenantDetailPage() {
     setFeatureState((prev) => {
       const updated = { ...prev };
       updated[group] = [...updated[group]];
-      updated[group][idx] = { ...updated[group][idx], enabled: !updated[group][idx].enabled };
-      toast({ title: `${updated[group][idx].name} ${updated[group][idx].enabled ? "enabled" : "disabled"}` });
+      updated[group][idx] = {
+        ...updated[group][idx],
+        enabled: !updated[group][idx].enabled,
+      };
+      toast({
+        title: `${updated[group][idx].name} ${updated[group][idx].enabled ? "enabled" : "disabled"}`,
+      });
       return updated;
     });
   };
@@ -73,13 +99,19 @@ export default function TenantDetailPage() {
   return (
     <>
       <PageHeader title={tenant.business}>
-        <Button variant="outline" onClick={() => toast({ title: "Edit mode", description: `Editing ${tenant.business}` })}>Edit</Button>
-        <Button variant="destructive" onClick={() => toast({ title: "Tenant Suspended" })}>Suspend</Button>
+        <Button
+          variant="destructive"
+          onClick={() => toast({ title: "Tenant Suspended" })}
+        >
+          Suspend
+        </Button>
       </PageHeader>
 
       <div className="grid gap-6 md:grid-cols-3">
         <Card>
-          <CardHeader><CardTitle className="text-base">Tenant Info</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Tenant Info</CardTitle>
+          </CardHeader>
           <CardContent className="space-y-3 text-sm">
             {[
               ["Business", tenant.business],
@@ -95,7 +127,14 @@ export default function TenantDetailPage() {
             ))}
             <div className="flex justify-between items-center">
               <span className="text-muted-foreground">Status</span>
-              <Badge variant={tenant.status === "Active" ? "default" : "destructive"} className={tenant.status === "Active" ? "bg-success text-success-foreground" : ""}>
+              <Badge
+                variant={tenant.status === "Active" ? "default" : "destructive"}
+                className={
+                  tenant.status === "Active"
+                    ? "bg-success text-success-foreground"
+                    : ""
+                }
+              >
                 {tenant.status}
               </Badge>
             </div>
@@ -105,8 +144,18 @@ export default function TenantDetailPage() {
         <div className="md:col-span-2">
           <Tabs defaultValue="overview">
             <TabsList className="w-full justify-start overflow-x-auto">
-              {["Overview", "Companies", "Usage", "Billing", "Modules", "Features", "Logs"].map((t) => (
-                <TabsTrigger key={t} value={t.toLowerCase()}>{t}</TabsTrigger>
+              {[
+                "Overview",
+                "Companies",
+                "Usage",
+                "Billing",
+                "Modules",
+                "Features",
+                "Logs",
+              ].map((t) => (
+                <TabsTrigger key={t} value={t.toLowerCase()}>
+                  {t}
+                </TabsTrigger>
               ))}
             </TabsList>
 
@@ -115,9 +164,19 @@ export default function TenantDetailPage() {
                 {usageData.slice(0, 4).map((u) => (
                   <Card key={u.name}>
                     <CardContent className="p-4">
-                      <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{u.name}</div>
-                      <div className="text-xl font-bold tabular-nums">{u.used.toLocaleString()} <span className="text-sm font-normal text-muted-foreground">/ {u.limit.toLocaleString()}</span></div>
-                      <Progress value={(u.used / u.limit) * 100} className="mt-2 h-1.5" />
+                      <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                        {u.name}
+                      </div>
+                      <div className="text-xl font-bold tabular-nums">
+                        {u.used.toLocaleString()}{" "}
+                        <span className="text-sm font-normal text-muted-foreground">
+                          / {u.limit.toLocaleString()}
+                        </span>
+                      </div>
+                      <Progress
+                        value={(u.used / u.limit) * 100}
+                        className="mt-2 h-1.5"
+                      />
                     </CardContent>
                   </Card>
                 ))}
@@ -130,19 +189,34 @@ export default function TenantDetailPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b">
-                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">Company</th>
-                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">Websites</th>
-                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">Users</th>
+                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">
+                          Company
+                        </th>
+                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">
+                          Websites
+                        </th>
+                        <th className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">
+                          Users
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {["Main Store", "Warehouse Ops", "Online Division"].map((c, i) => (
-                        <tr key={c} className="border-b last:border-0 hover:bg-muted/50 transition-colors">
-                          <td className="py-2.5 px-3 font-medium">{c}</td>
-                          <td className="py-2.5 px-3 text-muted-foreground">{i + 1}</td>
-                          <td className="py-2.5 px-3 text-muted-foreground">{(i + 1) * 5}</td>
-                        </tr>
-                      ))}
+                      {["Main Store", "Warehouse Ops", "Online Division"].map(
+                        (c, i) => (
+                          <tr
+                            key={c}
+                            className="border-b last:border-0 hover:bg-muted/50 transition-colors"
+                          >
+                            <td className="py-2.5 px-3 font-medium">{c}</td>
+                            <td className="py-2.5 px-3 text-muted-foreground">
+                              {i + 1}
+                            </td>
+                            <td className="py-2.5 px-3 text-muted-foreground">
+                              {(i + 1) * 5}
+                            </td>
+                          </tr>
+                        ),
+                      )}
                     </tbody>
                   </table>
                 </CardContent>
@@ -156,23 +230,56 @@ export default function TenantDetailPage() {
                     <CardContent className="p-4">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-sm font-medium">{u.name}</span>
-                        <span className="text-sm tabular-nums text-muted-foreground">{u.used.toLocaleString()} / {u.limit.toLocaleString()}</span>
+                        <span className="text-sm tabular-nums text-muted-foreground">
+                          {u.used.toLocaleString()} / {u.limit.toLocaleString()}
+                        </span>
                       </div>
-                      <Progress value={(u.used / u.limit) * 100} className="h-2" />
+                      <Progress
+                        value={(u.used / u.limit) * 100}
+                        className="h-2"
+                      />
                     </CardContent>
                   </Card>
                 ))}
               </div>
               <Card>
-                <CardHeader><CardTitle className="text-base">API Calls (Last 7 Days)</CardTitle></CardHeader>
+                <CardHeader>
+                  <CardTitle className="text-base">
+                    API Calls (Last 7 Days)
+                  </CardTitle>
+                </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={200}>
                     <BarChart data={apiUsageByDay}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis dataKey="day" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                      <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                      <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "8px" }} />
-                      <Bar dataKey="calls" fill="hsl(var(--chart-1))" radius={[4, 4, 0, 0]} />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
+                      <XAxis
+                        dataKey="day"
+                        tick={{
+                          fill: "hsl(var(--muted-foreground))",
+                          fontSize: 12,
+                        }}
+                      />
+                      <YAxis
+                        tick={{
+                          fill: "hsl(var(--muted-foreground))",
+                          fontSize: 12,
+                        }}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          background: "hsl(var(--card))",
+                          border: "1px solid hsl(var(--border))",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Bar
+                        dataKey="calls"
+                        fill="hsl(var(--chart-1))"
+                        radius={[4, 4, 0, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -186,24 +293,58 @@ export default function TenantDetailPage() {
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-b">
-                          {["Invoice #", "Amount", "Tax", "Total", "Status", "Paid Date"].map((h) => (
-                            <th key={h} className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">{h}</th>
+                          {[
+                            "Invoice #",
+                            "Amount",
+                            "Tax",
+                            "Total",
+                            "Status",
+                            "Paid Date",
+                          ].map((h) => (
+                            <th
+                              key={h}
+                              className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase"
+                            >
+                              {h}
+                            </th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
                         {mockBillingHistory.map((b) => (
-                          <tr key={b.id} className="border-b last:border-0 hover:bg-muted/50 transition-colors">
+                          <tr
+                            key={b.id}
+                            className="border-b last:border-0 hover:bg-muted/50 transition-colors"
+                          >
                             <td className="py-2.5 px-3 font-medium">{b.id}</td>
-                            <td className="py-2.5 px-3 tabular-nums">${b.amount}</td>
-                            <td className="py-2.5 px-3 tabular-nums">${b.tax}</td>
-                            <td className="py-2.5 px-3 tabular-nums font-medium">${b.total}</td>
+                            <td className="py-2.5 px-3 tabular-nums">
+                              ${b.amount}
+                            </td>
+                            <td className="py-2.5 px-3 tabular-nums">
+                              ${b.tax}
+                            </td>
+                            <td className="py-2.5 px-3 tabular-nums font-medium">
+                              ${b.total}
+                            </td>
                             <td className="py-2.5 px-3">
-                              <Badge variant={b.status === "Paid" ? "default" : "destructive"} className={b.status === "Paid" ? "bg-success text-success-foreground" : ""}>
+                              <Badge
+                                variant={
+                                  b.status === "Paid"
+                                    ? "default"
+                                    : "destructive"
+                                }
+                                className={
+                                  b.status === "Paid"
+                                    ? "bg-success text-success-foreground"
+                                    : ""
+                                }
+                              >
                                 {b.status}
                               </Badge>
                             </td>
-                            <td className="py-2.5 px-3 text-muted-foreground">{b.paidDate || "—"}</td>
+                            <td className="py-2.5 px-3 text-muted-foreground">
+                              {b.paidDate || "—"}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -215,16 +356,26 @@ export default function TenantDetailPage() {
 
             <TabsContent value="modules" className="mt-4">
               <Card>
-                <CardHeader><CardTitle className="text-base">Module Access</CardTitle></CardHeader>
+                <CardHeader>
+                  <CardTitle className="text-base">Module Access</CardTitle>
+                </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {modules.map((m) => (
-                      <div key={m.id} className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors">
+                      <div
+                        key={m.id}
+                        className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                      >
                         <div>
                           <p className="font-medium text-sm">{m.name}</p>
-                          <p className="text-xs text-muted-foreground">{m.description}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {m.description}
+                          </p>
                         </div>
-                        <Switch checked={m.enabled} onCheckedChange={() => toggleModule(m.id)} />
+                        <Switch
+                          checked={m.enabled}
+                          onCheckedChange={() => toggleModule(m.id)}
+                        />
                       </div>
                     ))}
                   </div>
@@ -235,12 +386,22 @@ export default function TenantDetailPage() {
             <TabsContent value="features" className="mt-4 space-y-4">
               {Object.entries(featureState).map(([group, items]) => (
                 <Card key={group}>
-                  <CardHeader><CardTitle className="text-base">{group} Features</CardTitle></CardHeader>
+                  <CardHeader>
+                    <CardTitle className="text-base">
+                      {group} Features
+                    </CardTitle>
+                  </CardHeader>
                   <CardContent className="space-y-3">
                     {items.map((f, i) => (
-                      <div key={f.name} className="flex items-center justify-between">
+                      <div
+                        key={f.name}
+                        className="flex items-center justify-between"
+                      >
                         <span className="text-sm">{f.name}</span>
-                        <Switch checked={f.enabled} onCheckedChange={() => toggleFeature(group, i)} />
+                        <Switch
+                          checked={f.enabled}
+                          onCheckedChange={() => toggleFeature(group, i)}
+                        />
                       </div>
                     ))}
                   </CardContent>
@@ -255,21 +416,46 @@ export default function TenantDetailPage() {
                     <thead>
                       <tr className="border-b">
                         {["Level", "Service", "Message", "Time"].map((h) => (
-                          <th key={h} className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase">{h}</th>
+                          <th
+                            key={h}
+                            className="text-left py-2 px-3 text-xs font-medium text-muted-foreground uppercase"
+                          >
+                            {h}
+                          </th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {mockSystemLogs.slice(0, 4).map((l) => (
-                        <tr key={l.id} className="border-b last:border-0 hover:bg-muted/50 transition-colors">
+                        <tr
+                          key={l.id}
+                          className="border-b last:border-0 hover:bg-muted/50 transition-colors"
+                        >
                           <td className="py-2.5 px-3">
-                            <Badge variant={l.level === "error" ? "destructive" : l.level === "warning" ? "secondary" : "outline"} className={l.level === "warning" ? "bg-warning text-warning-foreground" : ""}>
+                            <Badge
+                              variant={
+                                l.level === "error"
+                                  ? "destructive"
+                                  : l.level === "warning"
+                                    ? "secondary"
+                                    : "outline"
+                              }
+                              className={
+                                l.level === "warning"
+                                  ? "bg-warning text-warning-foreground"
+                                  : ""
+                              }
+                            >
                               {l.level}
                             </Badge>
                           </td>
-                          <td className="py-2.5 px-3 text-muted-foreground">{l.service}</td>
+                          <td className="py-2.5 px-3 text-muted-foreground">
+                            {l.service}
+                          </td>
                           <td className="py-2.5 px-3">{l.message}</td>
-                          <td className="py-2.5 px-3 text-muted-foreground text-xs">{l.timestamp}</td>
+                          <td className="py-2.5 px-3 text-muted-foreground text-xs">
+                            {l.timestamp}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

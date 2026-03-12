@@ -67,7 +67,7 @@ export function AppSidebar({
       >
         {!collapsed && (
           <span className="font-bold text-lg text-foreground tracking-tight">
-            SaaS Admin
+            Super Admin
           </span>
         )}
         <Button

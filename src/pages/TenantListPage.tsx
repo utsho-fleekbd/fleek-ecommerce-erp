@@ -231,7 +231,7 @@ export default function TenantListPage() {
 
       {/* Create Tenant Modal */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <DialogContent className="max-w-lg max-h-[99vh] overflow-y-auto">
+        <DialogContent className="max-w-lg max-h-[99vh] overflow-y-auto sidebar-thin">
           <DialogHeader>
             <DialogTitle>Create New Tenant</DialogTitle>
           </DialogHeader>
@@ -254,7 +254,7 @@ export default function TenantListPage() {
             ))}
             <div className="space-y-1.5">
               <Label htmlFor="logo">Logo</Label>
-              <Input id="logo" type="file" />
+              <Input id="logo" type="file" accept="image/*" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
@@ -342,7 +342,7 @@ export default function TenantListPage() {
                 });
               }}
             >
-              Delete
+              Suspend
             </Button>
           </DialogFooter>
         </DialogContent>
